@@ -24,28 +24,28 @@ I know, I know - what does this functionality have to do with MS Excel? If like 
 
 ```vb
 Sub example()
-    Dim ffmpeg As New ffmpeg
-    Dim ffplay As New ffplay
-    Dim ffprobe as New ffprobe
+    Dim mpeg As New ffMpeg
+    Dim player As New ffPlay
+    Dim probe as New ffProbe
     Dim eparms As New ffEncodeSet
     Dim txts As New ffTexts
     
     'uncomment and modify commands below if media files are in a different loc than this Excel file
-    'ffmpeg.DefaultIOPath="[path to your media files]"
-    'ffplay.DefaultIOPath="[path to your media files]"
-    'ffprobe.DefaultIOPath="[path to your media files]"
+    'mpeg.DefaultIOPath="[path to your media files]"
+    'player.DefaultIOPath="[path to your media files]"
+    'probe.DefaultIOPath="[path to your media files]"
     
     'trim the input video to the desired time window
-    ffmpeg.Trim "BigBuckBunny.mp4", "trim.mp4", "1:16", "1:36", True
+    mpeg.Trim "BigBuckBunny.mp4", "trim.mp4", "1:16", "1:36", True
     
     'reverse the trimmed result
-    ffmpeg.Reverse "trim.mp4", "rev.mp4"
+    mpeg.Reverse "trim.mp4", "rev.mp4"
     
     'slow motion of the trimmed result
-    ffmpeg.ChangeSpeed "trim.mp4", "slomo.mp4", 0.5
+    mpeg.ChangeSpeed "trim.mp4", "slomo.mp4", 0.5
     
     'join the 3 videos produced above
-    ffmpeg.Join "trim.mp4, rev.mp4, slomo.mp4", "join.mp4"
+    mpeg.Join "trim.mp4, rev.mp4, slomo.mp4", "join.mp4"
     
     'now use the Texts class to draw some text overlays
     txts.MakeTexts 3
@@ -64,22 +64,22 @@ Sub example()
     txts(3).StartTime = 40: txts(3).EndTime = 80
     
     'draw the texts onto the composite video
-    ffmpeg.DrawText "join.mp4", "texts.mp4", txts
+    mpeg.DrawText "join.mp4", "texts.mp4", txts
     
     'specify a constant rate factor for encoding the final result using EncodeSet class
     eparms.Crf = 25
     
     'Make 3 second fade from/to black at beginning/end of video
-    ffmpeg.Fade "texts.mp4", "fade.mp4", 3, 3, , eparms
+    mpeg.Fade "texts.mp4", "fade.mp4", 3, 3, , eparms
     
     'print resulting file size to Intermediate Window
-    Debug.Print ffprobe.GetFileSize("fade.mp4")/1000 'in kb
+    Debug.Print probe.GetFileSize("fade.mp4")/1000 'in kb
     
     'delete the intermediate file products
-    ffmpeg.DeleteFiles "trim.mp4", "rev.mp4", "slomo.mp4", "join.mp4", "texts.mp4"
+    mpeg.DeleteFiles "trim.mp4", "rev.mp4", "slomo.mp4", "join.mp4", "texts.mp4"
     
     'play the result at 50% of the video window size
-    ffplay.Play "fade.mp4", , , , 0.5
+    player.Play "fade.mp4", , , , 0.5
 End Sub
 ```
 
