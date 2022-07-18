@@ -27,8 +27,8 @@ Sub example()
     Dim ffmpeg As New ffmpeg
     Dim ffplay As New ffplay
     Dim ffprobe as New ffprobe
-    Dim eparms As New EncodeSet
-    Dim txts As New Texts
+    Dim eparms As New ffEncodeSet
+    Dim txts As New ffTexts
     
     'uncomment and modify commands below if media files are in a different loc than this Excel file
     'ffmpeg.DefaultIOPath="[path to your media files]"
