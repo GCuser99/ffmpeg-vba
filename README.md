@@ -77,7 +77,7 @@ Sub example()
     'delete the intermediate file products
     ffmpeg.DeleteFiles "trim.mp4", "rev.mp4", "slomo.mp4", "join.mp4", "texts.mp4"
     
-    'play the result at 50% of the video size
+    'play the result at 50% of the video window size
     ffplay.Play "fade.mp4", , , , 0.5
 End Sub
 ```
