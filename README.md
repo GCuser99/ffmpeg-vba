@@ -33,6 +33,7 @@ Sub example()
     'uncomment and modify commands below if media files are in a different loc than this Excel file
     'ffmpeg.DefaultIOPath="[path to your media files]"
     'ffplay.DefaultIOPath="[path to your media files]"
+    'ffprobe.DefaultIOPath="[path to your media files]"
     
     'trim the input video to the desired time window
     ffmpeg.Trim "BigBuckBunny.mp4", "trim.mp4", "1:16", "1:36", True
