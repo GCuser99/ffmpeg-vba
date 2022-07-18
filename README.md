@@ -28,6 +28,7 @@ Sub example()
     Dim ffplay As New ffplay
     Dim ffprobe as New ffprobe
     Dim eparms As New EncodeSet
+    Dim txts As New Texts
     
     'uncomment and modify commands below if media files are in a different loc than this Excel file
     'ffmpeg.DefaultIOPath="[path to your media files]"
@@ -46,8 +47,6 @@ Sub example()
     ffmpeg.Join "trim.mp4, rev.mp4, slomo.mp4", "join.mp4"
     
     'now use the Texts class to draw some text overlays
-    Dim txts As New Texts
-    
     txts.MakeTexts 3
     
     'set some global text properties
