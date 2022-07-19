@@ -1,24 +1,24 @@
-## Software: FFmpeg-vba v0.1
+## Software: ffmpeg-vba v0.1
 
 This is a wrapper for automating video/image editing with FFmpeg, written in Windows Excel VBA.
 
-Ok, I know, I know... What does this functionality have to do with MS Excel? If like me, you have invested alot in learning VBA IDE, and you like to build automation templates, then perhaps this might be of interest. Otherwise, this wrapper may be of no use at all... :-)
+Ok, I know, I know... What does this functionality have to do with MS Excel? Not much. However, if like me, you have invested alot in learning the VBA IDE, and you like to build automation templates, then perhaps this media editor might be of interest. Otherwise, this wrapper may be of no use at all... :-)
 
 ## Features
 
 - Support for automating command line executables FFmpeg, FFprobe, and FFplay 
 - Wrappers for a useful functionality subset, including common tasks like trimming, editing, overlays, filtering, re-encoding, and more
 - Convenient video file play-back for instant feedback
-- Utility support for relative file paths, VBA RGB color specification, intermediate file deletion
+- Utility support for relative file paths, VBA RGB color specification, intermediate product file deletion
 - Ability to build and run your own commands if wrapper not already provided
 
 ## Setup
 
 1) Download/unzip ffmpeg-vba_v0.1.zip to a directory of your choice
-2) Download/unzip the ffpmeg software and place executables (ffmpeg.exe, ffprobe.exe, ffplay.exe) in same directory as the Excel macro file
+2) Download/unzip the [ffpmeg executables](https://ffmpeg.org/download.html) (ffmpeg.exe, ffprobe.exe, ffplay.exe) and place in same directory as the Excel macro file
 3) Download the sample video file called "BigBuckBunny.mp4" from [here](http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4) into same directory
 4) Open the excel macro file, go to VBA IDE under the Developer Tab
-5) Click on the "testing" standard module to browse and run examples that cover most of the functionality provided
+5) Click on the "examples" standard module to browse and run examples that cover most of the functionality provided
 
 ## Example Usage
 
@@ -62,7 +62,7 @@ Sub example1()
     'specify a constant rate factor for encoding the final result using EncodeSet class
     eparms.Crf = 25
     
-    'Make 3 second fade from/to black at beginning/end of video
+    'make 3 second fade from/to black at beginning/end of video
     media.Fade "texts.mp4", "fade.mp4", 3, 3, , eparms
     
     'print resulting file size to Intermediate Window
