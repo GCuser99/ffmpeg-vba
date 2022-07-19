@@ -102,10 +102,10 @@ Sub example2()
         slides(i).TransitionType = i - 1
     Next i
     
-    'compile into slide show
+    'compile into slide show video
     media.MakeSlideShow slides, "slideshow.mp4"
     
-    'delete images used
+    'delete images used with wildcard
     media.DeleteFiles "slide*.jpg"
     
     'play the show
