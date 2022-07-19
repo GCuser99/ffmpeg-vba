@@ -1,4 +1,4 @@
-## Software: FFmpeg-vba v0.1
+## Software: ffmpeg-vba v0.1
 
 This is a wrapper for automating video/image editing with FFmpeg, written in Windows Excel VBA.
 
