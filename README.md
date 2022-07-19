@@ -62,7 +62,7 @@ Sub example1()
     'specify a constant rate factor for encoding the final result using EncodeSet class
     eparms.Crf = 25
     
-    'Make 3 second fade from/to black at beginning/end of video
+    'make 3 second fade from/to black at beginning/end of video
     media.Fade "texts.mp4", "fade.mp4", 3, 3, , eparms
     
     'print resulting file size to Intermediate Window
