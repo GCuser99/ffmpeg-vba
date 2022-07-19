@@ -52,12 +52,9 @@ Sub example()
     txts.FontSize = 48
     
     'set individual text properties
-    txts(1).Text = "Trimmed Video"
-    txts(1).StartTime = 0: txts(1).EndTime = 20
-    txts(2).Text = "Reversed Video"
-    txts(2).StartTime = 20: txts(2).EndTime = 40
-    txts(3).Text = "Slow Motion Video"
-    txts(3).StartTime = 40: txts(3).EndTime = 80
+    txts(1).Text = "Trimmed Video": txts(1).StartTime = 0: txts(1).EndTime = 20
+    txts(2).Text = "Reversed Video": txts(2).StartTime = 20: txts(2).EndTime = 40
+    txts(3).Text = "Slow Motion Video": txts(3).StartTime = 40: txts(3).EndTime = 80
     
     'draw the texts onto the composite video
     mpeg.DrawText "join.mp4", "texts.mp4", txts
