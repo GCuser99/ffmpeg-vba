@@ -24,24 +24,24 @@ Ok, I know, I know... What does this functionality have to do with MS Excel? If 
 
 ```vb
 Sub example()
-    Dim mpeg As New ffMpeg
+    Dim video As New ffMpeg
     Dim eparms As New ffEncodeSet
     Dim txts As New ffTexts
     
     'uncomment and modify command below if media files are in a different loc than this Excel file
-    'mpeg.DefaultIOPath="[path to your media files]"
+    'video.DefaultIOPath="[path to your media files]"
     
     'trim the input video to the desired time window
-    mpeg.Trim "BigBuckBunny.mp4", "trim.mp4", "1:16", "1:36", True
+    video.Trim "BigBuckBunny.mp4", "trim.mp4", "1:16", "1:36", True
     
     'reverse the trimmed result
-    mpeg.Reverse "trim.mp4", "rev.mp4"
+    video.Reverse "trim.mp4", "rev.mp4"
     
     'slow motion of the trimmed result
-    mpeg.ChangeSpeed "trim.mp4", "slomo.mp4", 0.5
+    video.ChangeSpeed "trim.mp4", "slomo.mp4", 0.5
     
     'join the 3 videos produced above
-    mpeg.Join "trim.mp4, rev.mp4, slomo.mp4", "join.mp4"
+    video.Join "trim.mp4, rev.mp4, slomo.mp4", "join.mp4"
     
     'now use the Texts class to draw some text overlays
     txts.MakeTexts 3
@@ -57,22 +57,22 @@ Sub example()
     txts(3).Text = "Slow Motion Video": txts(3).StartTime = 40: txts(3).EndTime = 80
     
     'draw the texts onto the composite video
-    mpeg.DrawText "join.mp4", "texts.mp4", txts
+    video.DrawText "join.mp4", "texts.mp4", txts
     
     'specify a constant rate factor for encoding the final result using EncodeSet class
     eparms.Crf = 25
     
     'Make 3 second fade from/to black at beginning/end of video
-    mpeg.Fade "texts.mp4", "fade.mp4", 3, 3, , eparms
+    video.Fade "texts.mp4", "fade.mp4", 3, 3, , eparms
     
     'print resulting file size to Intermediate Window
-    Debug.Print mpeg.Probe.GetFileSize("fade.mp4")/1000 'in kb
+    Debug.Print video.Probe.GetFileSize("fade.mp4")/1000 'in kb
     
     'delete the intermediate file products
-    mpeg.DeleteFiles "trim.mp4", "rev.mp4", "slomo.mp4", "join.mp4", "texts.mp4"
+    video.DeleteFiles "trim.mp4", "rev.mp4", "slomo.mp4", "join.mp4", "texts.mp4"
     
     'play the result at 50% of the video window size
-    mpeg.Play "fade.mp4", , , , 0.5
+    video.Play "fade.mp4", , , , 0.5
 End Sub
 ```
 
