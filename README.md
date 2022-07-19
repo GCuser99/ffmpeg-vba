@@ -16,7 +16,7 @@ I know, I know - what does this functionality have to do with MS Excel? If like 
 
 1) Download ffmpeg-vba.xlsm to a directory of your choice
 2) Download/unzip the ffpmeg software and place executables (ffmpeg.exe, ffprobe.exe, ffplay.exe) in same directory as the Excel macro file
-3) Copy the sample video file called "BigBuckBunny.mp4" from [here]http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 into same directory
+3) Copy the sample video file called "BigBuckBunny.mp4" from [here](http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4) into same directory
 4) Open the excel macro file, go to VBA IDE under the Developer Tab
 5) Click on the "testing" standard module to browse and run examples that cover most of the functionality provided
 
