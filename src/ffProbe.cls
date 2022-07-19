@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' ==========================================================================
-' ffmpeg-vba v0.2
+' ffmpeg-vba v0.3
 '
 ' An ffmpeg wrapper written in MS Excel VBA (MS Windows)
 '
@@ -74,7 +74,7 @@ End Property
 
 Public Function RunCommand(ByVal commandStr As String, Optional ByVal inputFilepath) As String
     If Not IsMissing(inputFilepath) Then
-        inputFilepath = Chr(34) & GetAbsolutePath(inputFilepath) & Chr(34)
+        inputFilepath = Chr(34) & GetAbsolutePath(inputFilepath, mDefaultIOPath) & Chr(34)
         cmd = VBA.Trim(commandStr) & " " & inputFilepath
     Else
         cmd = VBA.Trim(commandStr)

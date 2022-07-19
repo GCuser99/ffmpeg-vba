@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' ==========================================================================
-' ffmpeg-vba v0.2
+' ffmpeg-vba v0.3
 '
 ' An ffmpeg wrapper written in MS Excel VBA (MS Windows)
 '
@@ -55,7 +55,6 @@ Public Sub Play(ByVal inputFilepath As String, Optional ByVal startTime As Integ
         cmd = cmd & " -fs"
     Else
         If scaleWindow <> 1# Then
-            Dim ffProbe As New ffProbe
             Dim streamInfo As ffStreamInfo
             streamInfo = GetInfo(inputFilepath)
             w = CInt(streamInfo.videoWidth * scaleWindow)
@@ -133,14 +132,15 @@ End Function
 
 Private Function GetInfo(ByVal inputFilepath As String) As ffStreamInfo
     Dim jc As New JSonConverter
-    Dim ffProbe As New ffProbe
+    Dim prober As New ffProbe
     Dim d As Dictionary
     Dim streamInfo As ffStreamInfo
     Dim streams As Collection
 
     commandStr = "-hide_banner -print_format json -show_entries stream=codec_name,codec_type,duration,pix_fmt,width,height"
     
-    resp = ffProbe.RunCommand(commandStr, GetAbsolutePath(inputFilepath, mDefaultIOPath))
+    prober.DefaultIOPath = mDefaultIOPath
+    resp = prober.RunCommand(commandStr, inputFilepath)
     
     If Not jc.ParseJSON(resp).Exists("streams") Then
         GetInfo = streamInfo

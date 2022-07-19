@@ -1,6 +1,6 @@
 Attribute VB_Name = "examples"
 ' ==========================================================================
-' ffmpeg-vba v0.2
+' ffmpeg-vba v0.3
 '
 ' An ffmpeg wrapper written in MS Excel VBA (MS Windows)
 '

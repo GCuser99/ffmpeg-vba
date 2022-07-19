@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' ==========================================================================
-' ffmpeg-vba v0.2
+' ffmpeg-vba v0.3
 '
 ' An ffmpeg wrapper written in MS Excel VBA (MS Windows)
 '
@@ -802,8 +802,7 @@ Public Sub Play(ByVal inputFilepath As String, Optional ByVal startTime As Integ
 End Sub
 
 Public Function GetMetaRotation(ByVal inputFilepath As String) As Integer
-    Dim Probe As New ffProbe
-    GetMetaRotation = Probe.GetMetaRotation(GetAbsolutePath(inputFilepath, mDefaultIOPath))
+    GetMetaRotation = Me.Probe.GetMetaRotation(inputFilepath)
 End Function
 
 Public Sub DeleteFiles(ParamArray filelist() As Variant)
@@ -847,8 +846,7 @@ Public Sub DrawText(ByVal inputFilepath As String, ByVal outputFilepath As Strin
         txt = EscapeSpecialChars(oTextDraw.Text)
 
         If et = -1 Then
-            Dim Probe As New ffProbe
-            et = Probe.GetDuration(GetAbsolutePath(inputFilepath, mDefaultIOPath))
+            et = Me.Probe.GetDuration(inputFilepath)
         End If
 
         cmd = cmd & "drawtext=enable='between(t," & st & "," & et & ")':text='" & txt & "'"
@@ -944,14 +942,13 @@ End Sub
 
 Private Function GetInfo(ByVal inputFilepath As String) As ffStreamInfo
     Dim jc As New JSonConverter
-    Dim Probe As New ffProbe
     Dim d As Dictionary
     Dim streamInfo As ffStreamInfo
     Dim streams As Collection
 
     commandStr = "-hide_banner -print_format json -show_entries stream=codec_name,codec_type,duration,pix_fmt,width,height"
     
-    resp = Probe.RunCommand(commandStr, GetAbsolutePath(inputFilepath, mDefaultIOPath))
+    resp = Me.Probe.RunCommand(commandStr, inputFilepath)
     
     Set streams = jc.ParseJSON(resp)("streams")
     
