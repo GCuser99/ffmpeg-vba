@@ -69,7 +69,7 @@ Sub example()
     mpeg.Fade "texts.mp4", "fade.mp4", 3, 3, , eparms
     
     'print resulting file size to Intermediate Window
-    Debug.Print mpeg.probe.GetFileSize("fade.mp4")/1000 'in kb
+    Debug.Print mpeg.Probe.GetFileSize("fade.mp4")/1000 'in kb
     
     'delete the intermediate file products
     mpeg.DeleteFiles "trim.mp4", "rev.mp4", "slomo.mp4", "join.mp4", "texts.mp4"
