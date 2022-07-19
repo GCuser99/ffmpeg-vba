@@ -7,7 +7,7 @@ Ok, I know, I know... What does this functionality have to do with MS Excel? If 
 ## Features
 
 - Support for automating command line executables FFmpeg, FFprobe, and FFplay 
-- Wrappers for a useful functionality subset, including common tasks like trimming, editing, overlays, re-encoding, and more
+- Wrappers for a useful functionality subset, including common tasks like trimming, editing, overlays, filtering, re-encoding, and more
 - Convenient video file play-back for instant feedback
 - Utility support for relative file paths, VBA RGB color specification, intermediate file deletion
 - Ability to build and run your own commands if wrapper not already provided
@@ -23,7 +23,7 @@ Ok, I know, I know... What does this functionality have to do with MS Excel? If 
 ## Example Usage
 
 ```vb
-Sub example()
+Sub example1()
     Dim media As New ffMpeg
     Dim eparms As New ffEncodeSet
     Dim txts As New ffTexts
@@ -73,6 +73,43 @@ Sub example()
     
     'play the result at 50% of the video window size
     media.Play "fade.mp4", , , , 0.5
+End Sub
+```
+```vb
+Sub example2()
+    Dim media As New ffMpeg
+    Dim slides As New ffSlideShow
+    
+    'uncomment and modify command below if media files are in a different loc than this Excel file
+    'media.DefaultIOPath="[path to your media files]"
+    
+    'extract images every 13.5 secs for slide show
+    For i = 1 To 44
+        media.ExtractFrame "BigBuckBunny.mp4", "slide" & Format(i, "00") & ".jpg", 13.5 * (i - 1) + 1
+    Next i
+    
+    'initialize slides
+    slides.MakeSlides 44
+    
+    'set global properties for slide deck
+    slides.Duration = 2.5
+    slides.TransitionDuration = 1
+    
+    'set properties for each slide
+    For i = 1 To 44
+        slides(i).InputPath = "slide" & Format(i, "00") & ".jpg"
+        'set a different xFade transition
+        slides(i).TransitionType = i - 1
+    Next i
+    
+    'compile into slide show
+    media.MakeSlideShow slides, "slideshow.mp4"
+    
+    'delete images used
+    media.DeleteFiles "slide*.jpg"
+    
+    'play the show
+    media.Play "slideshow.mp4", , , , 0.5
 End Sub
 ```
 
