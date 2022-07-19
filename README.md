@@ -2,7 +2,7 @@
 
 This is a wrapper for automating video/image editing with FFmpeg, written in Windows Excel VBA.
 
-Ok, I know, I know... What does this functionality have to do with MS Excel? Not much. Howver, if like me, you have invested alot in learning VBA IDE, and you like to build automation templates, then perhaps this might be of interest. Otherwise, this wrapper may be of no use at all... :-)
+Ok, I know, I know... What does this functionality have to do with MS Excel? Not much. However, if like me, you have invested alot in learning the VBA IDE, and you like to build automation templates, then perhaps this media editor might be of interest. Otherwise, this wrapper may be of no use at all... :-)
 
 ## Features
 
