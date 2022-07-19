@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' ==========================================================================
-' ffmpeg-vba v0.1
+' ffmpeg-vba v0.2
 '
 ' An ffmpeg wrapper written in MS Excel VBA (MS Windows)
 '

@@ -2,13 +2,13 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "ffprobe"
+Attribute VB_Name = "ffProbe"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' ==========================================================================
-' ffmpeg-vba v0.1
+' ffmpeg-vba v0.2
 '
 ' An ffmpeg wrapper written in MS Excel VBA (MS Windows)
 '
@@ -76,6 +76,8 @@ Public Function RunCommand(ByVal commandStr As String, Optional ByVal inputFilep
     If Not IsMissing(inputFilepath) Then
         inputFilepath = Chr(34) & GetAbsolutePath(inputFilepath) & Chr(34)
         cmd = VBA.Trim(commandStr) & " " & inputFilepath
+    Else
+        cmd = VBA.Trim(commandStr)
     End If
     
     RunCommand = SendCommand(cmd)

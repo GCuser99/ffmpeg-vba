@@ -2,13 +2,13 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "ffMpeg"
+Attribute VB_Name = "ffMPeg"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' ==========================================================================
-' ffmpeg-vba v0.1
+' ffmpeg-vba v0.2
 '
 ' An ffmpeg wrapper written in MS Excel VBA (MS Windows)
 '
@@ -797,7 +797,8 @@ End Sub
 
 Public Sub Play(ByVal inputFilepath As String, Optional ByVal startTime As Integer = 0, Optional ByVal endTime As Integer = -1, Optional ByVal autoExit = True, Optional ByVal scaleWindow As Single = 1#, Optional ByVal fullScreen As Boolean = False)
     Dim player As New ffPlay
-    player.Play GetAbsolutePath(inputFilepath, mDefaultIOPath), startTime, endTime, autoExit, scaleWindow, fullScreen
+    player.DefaultIOPath = mDefaultIOPath
+    player.Play inputFilepath, startTime, endTime, autoExit, scaleWindow, fullScreen
 End Sub
 
 Public Function GetMetaRotation(ByVal inputFilepath As String) As Integer
@@ -904,6 +905,13 @@ Public Function Probe() As ffProbe
     Dim p As New ffProbe
     p.DefaultIOPath = mDefaultIOPath
     Set Probe = p
+End Function
+
+Public Function GetProgramVersion() As String
+    Dim jc As New JSonConverter
+    cmd = "-hide_banner -loglevel error -v 0 -of default=nw=1:nk=1 -show_program_version -print_format json"
+    resp = Me.Probe.RunCommand(cmd)
+    GetProgramVersion = jc.ParseJSON(resp)("program_version")("version")
 End Function
 
 Private Function GetAbsolutePath(ByVal strPath As String, Optional ByVal refPath As String = "") As String
