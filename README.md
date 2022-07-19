@@ -25,15 +25,11 @@ Ok, I know, I know... What does this functionality have to do with MS Excel? If 
 ```vb
 Sub example()
     Dim mpeg As New ffMpeg
-    Dim player As New ffPlay
-    Dim probe as New ffProbe
     Dim eparms As New ffEncodeSet
     Dim txts As New ffTexts
     
-    'uncomment and modify commands below if media files are in a different loc than this Excel file
+    'uncomment and modify command below if media files are in a different loc than this Excel file
     'mpeg.DefaultIOPath="[path to your media files]"
-    'player.DefaultIOPath="[path to your media files]"
-    'probe.DefaultIOPath="[path to your media files]"
     
     'trim the input video to the desired time window
     mpeg.Trim "BigBuckBunny.mp4", "trim.mp4", "1:16", "1:36", True
@@ -73,13 +69,13 @@ Sub example()
     mpeg.Fade "texts.mp4", "fade.mp4", 3, 3, , eparms
     
     'print resulting file size to Intermediate Window
-    Debug.Print probe.GetFileSize("fade.mp4")/1000 'in kb
+    Debug.Print mpeg.probe.GetFileSize("fade.mp4")/1000 'in kb
     
     'delete the intermediate file products
     mpeg.DeleteFiles "trim.mp4", "rev.mp4", "slomo.mp4", "join.mp4", "texts.mp4"
     
     'play the result at 50% of the video window size
-    player.Play "fade.mp4", , , , 0.5
+    mpeg.Play "fade.mp4", , , , 0.5
 End Sub
 ```
 
