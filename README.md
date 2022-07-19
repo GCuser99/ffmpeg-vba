@@ -9,7 +9,7 @@ Ok, I know, I know... What does this functionality have to do with MS Excel? Not
 - Support for automating command line executables FFmpeg, FFprobe, and FFplay 
 - Wrappers for a useful functionality subset, including common tasks like trimming, editing, overlays, filtering, re-encoding, and more
 - Convenient video file play-back for instant feedback
-- Utility support for relative file paths, VBA RGB color specification, intermediate file deletion
+- Utility support for relative file paths, VBA RGB color specification, intermediate product file deletion
 - Ability to build and run your own commands if wrapper not already provided
 
 ## Setup
