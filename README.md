@@ -112,50 +112,6 @@ Sub slideshow_example()
     media.Play "slideshow.mp4", , , , 0.5
 End Sub
 ```
-```vba
-Sub overlay_example()
-    Dim ovls As New ffOverlays
-    Dim media As New ffMpeg
-    
-    'uncomment and modify command below if media files are in a different loc than this Excel file
-    'media.DefaultIOPath="[path to your media files]"
-    
-    'extract images from video
-    media.ExtractFrame "BigBuckBunny.mp4", "overlay01.jpg", 27
-    media.ExtractFrame "BigBuckBunny.mp4", "overlay02.jpg", 37
-    media.ExtractFrame "BigBuckBunny.mp4", "overlay03.jpg", 47
-    
-    'initialize overlays with ffOverlay class
-    ovls.MakeOverlays 3
-    
-    'set some global overlay properties
-    ovls.XLoc = "right-10": ovls.YLoc = 10
-    ovls.FadeInDuration = 3: ovls.FadeOutDuration = 3
-    
-    'set individual overlay properties
-    ovls(1).InputPath = "overlay01.jpg"
-    ovls(1).startTime = 0: ovls(1).endTime = 10
-    ovls(1).Resize = 0.3
-    
-    ovls(2).InputPath = "overlay02.jpg"
-    ovls(2).startTime = 7: ovls(2).endTime = 17
-    ovls(2).Resize = 0.3
-    
-    ovls(3).InputPath = "overlay03.jpg"
-    ovls(3).startTime = 14: ovls(3).endTime = 24
-    ovls(3).Resize = 0.3
-    
-    'trim the input video
-    media.Trim "BigBuckBunny.mp4", "trim.mp4", 27, 52
-    
-    'overlay the images onto the trimmed video
-    media.OverlayImage "trim.mp4", "overlays.mp4", ovls
-
-    media.DeleteFiles "trim.mp4", "overlay*.jpg"
-    
-    media.Play "overlays.mp4", , , , 0.5
-End Sub
-```
 ## Collaboration
 
 If you try this and want to report bugs or share ideas for improvement, your contribution is welcome!
