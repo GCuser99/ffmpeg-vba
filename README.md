@@ -129,7 +129,7 @@ Sub overlay_example()
     ovls.MakeOverlays 3
     
     'set some global overlay properties
-    ovls.XLoc = "right-10": ovls.YLoc = "10"
+    ovls.XLoc = "right-10": ovls.YLoc = 10
     ovls.FadeInDuration = 3: ovls.FadeOutDuration = 3
     
     'set individual overlay properties
