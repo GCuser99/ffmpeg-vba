@@ -1,4 +1,4 @@
-## Software: ffmpeg-vba v0.3
+## Software: ffmpeg-vba v0.4
 
 This is a wrapper for automating video/image editing with FFmpeg, written in Windows Excel VBA.
 
@@ -22,7 +22,7 @@ So what does this functionality have to do with MS Excel? Not much. However, if 
 
 ## Example Usage
 
-```vb
+```vba
 Sub example()
     Dim media As New ffMpeg
     Dim eparms As New ffEncodeSet
@@ -75,7 +75,7 @@ Sub example()
     media.Play "fade.mp4", , , , 0.5
 End Sub
 ```
-```vb
+```vba
 Sub slideshow_example()
     Dim media As New ffMpeg
     Dim slides As New ffSlideShow
@@ -110,6 +110,52 @@ Sub slideshow_example()
     
     'play the show
     media.Play "slideshow.mp4", , , , 0.5
+End Sub
+```
+```vba
+Sub overlay_example()
+    Dim ovls As New ffOverlays
+    Dim media As New ffMpeg
+    
+    'uncomment and modify command below if media files are in a different loc than this Excel file
+    'media.DefaultIOPath="[path to your media files]"
+    
+    'overlays can be videos or images or a mix thereof
+    
+    'extract overlay images/videos from video
+    media.Trim "BigBuckBunny.mp4", "overlay01.mp4", 37, 47, True
+    media.Trim "BigBuckBunny.mp4", "overlay02.mp4", 67, 77, True
+    media.Trim "BigBuckBunny.mp4", "overlay03.mp4", 87, 97, True
+    
+    'initialize overlays with ffOverlay class
+    ovls.MakeOverlays 3
+    
+    'set some global overlay properties
+    ovls.XLoc = "right-10": ovls.YLoc = 10
+    ovls.FadeInDuration = 3: ovls.FadeOutDuration = 3
+    
+    'set individual overlay properties
+    ovls(1).InputPath = "overlay01.mp4"
+    ovls(1).startTime = 0: ovls(1).endTime = 10
+    ovls(1).Resize = 0.3
+    
+    ovls(2).InputPath = "overlay02.mp4"
+    ovls(2).startTime = 7: ovls(2).endTime = 17
+    ovls(2).Resize = 0.3
+    
+    ovls(3).InputPath = "overlay03.mp4"
+    ovls(3).startTime = 14: ovls(3).endTime = 24
+    ovls(3).Resize = 0.3
+    
+    'trim the input video
+    media.Trim "BigBuckBunny.mp4", "trim.mp4", 27, 52, True
+    
+    'overlay onto the "base" video
+    media.Overlay "trim.mp4", "overlays.mp4", ovls
+        
+    media.DeleteFiles "trim.mp4", "overlay0*.mp4"
+    
+    media.Play "overlays.mp4", , , , 0.5
 End Sub
 ```
 ## Collaboration
