@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' ==========================================================================
-' ffmpeg-vba v0.3
+' ffmpeg-vba v0.4
 '
 ' An ffmpeg wrapper written in MS Excel VBA (MS Windows)
 '
@@ -151,7 +151,7 @@ Sub RemoveAudio(ByVal inputFilepath As String, ByVal outputFilepath As String)
     SendCommand cmd
 End Sub
 
-Public Sub Trim(ByVal inputFilepath As String, ByVal outputFilepath As String, Optional ByVal startTime As String, Optional ByVal endTime As String, Optional ByVal ReEncode As Boolean = False, Optional ByVal useOutputSeeking As Boolean = False, Optional eparms As ffEncodeSet)
+Public Sub Trim(ByVal inputFilepath As String, ByVal outputFilepath As String, Optional ByVal startTime As String, Optional ByVal endTime As String, Optional ByVal ReEncode As Boolean = False, Optional ByVal useOutputSeeking As Boolean = False, Optional oEncSet As ffEncodeSet)
     instream = Chr(34) & GetAbsolutePath(inputFilepath, mDefaultIOPath) & Chr(34)
     outstream = Chr(34) & GetAbsolutePath(outputFilepath, mDefaultIOPath) & Chr(34)
     
@@ -171,7 +171,7 @@ Public Sub Trim(ByVal inputFilepath As String, ByVal outputFilepath As String, O
     
     If ReEncode Then
         'encode to trim accurately
-        If eparms Is Nothing Then encodeStr = "" Else encodeStr = eparms.GetEncodeString
+        If oEncSet Is Nothing Then encodeStr = "" Else encodeStr = oEncSet.GetEncodeString
 
         If useOutputSeeking Then
             cmd = " -ss " & st & " -i " & instream & " -to " & et & encodeStr & " -y " & outstream
@@ -190,11 +190,11 @@ Public Sub Trim(ByVal inputFilepath As String, ByVal outputFilepath As String, O
     SendCommand cmd
 End Sub
 
-Public Sub ReEncode(ByVal inputFilepath As String, ByVal outputFilepath As String, Optional ByVal useOutputSeeking As Boolean = False, Optional eparms As ffEncodeSet)
+Public Sub ReEncode(ByVal inputFilepath As String, ByVal outputFilepath As String, Optional ByVal useOutputSeeking As Boolean = False, Optional oEncSet As ffEncodeSet)
     instream = Chr(34) & GetAbsolutePath(inputFilepath, mDefaultIOPath) & Chr(34)
     outstream = Chr(34) & GetAbsolutePath(outputFilepath, mDefaultIOPath) & Chr(34)
     
-    If eparms Is Nothing Then encodeStr = "" Else encodeStr = eparms.GetEncodeString
+    If oEncSet Is Nothing Then encodeStr = "" Else encodeStr = oEncSet.GetEncodeString
     
     cmd = " -i " & instream & encodeStr & " -y " & outstream
     
@@ -210,7 +210,7 @@ Public Sub Copy(ByVal inputFilepath As String, ByVal outputFilepath As String)
     SendCommand cmd
 End Sub
 
-Public Sub Join(ByVal inputFilepathArray As Variant, ByVal outputFilepath As String, Optional ByVal ReEncode As Boolean = True, Optional eparms As ffEncodeSet)
+Public Sub Join(ByVal inputFilepathArray As Variant, ByVal outputFilepath As String, Optional ByVal ReEncode As Boolean = True, Optional oEncSet As ffEncodeSet)
     Dim fso As New FileSystemObject
     Dim fileStream As TextStream
     Dim streamInfo As ffStreamInfo
@@ -227,7 +227,7 @@ Public Sub Join(ByVal inputFilepathArray As Variant, ByVal outputFilepath As Str
     If ReEncode Then
         'if user didn't specify a parameter then we let ffmpeg use its own defaults
         
-        If eparms Is Nothing Then encodeStr = "" Else encodeStr = eparms.GetEncodeString
+        If oEncSet Is Nothing Then encodeStr = "" Else encodeStr = oEncSet.GetEncodeString
         
         cmd = ""
         cmd2 = ""
@@ -285,7 +285,7 @@ Public Sub Join(ByVal inputFilepathArray As Variant, ByVal outputFilepath As Str
     
 End Sub
 
-Public Sub Edit(ByVal inputFilepath As String, ByVal outputFilepath As String, ByVal keepTimesArray As Variant, Optional ByVal ReEncode As Boolean = True, Optional eparms As ffEncodeSet)
+Public Sub Edit(ByVal inputFilepath As String, ByVal outputFilepath As String, ByVal keepTimesArray As Variant, Optional ByVal ReEncode As Boolean = True, Optional oEncSet As ffEncodeSet)
     Dim fso As New FileSystemObject
     Dim fileStream As TextStream
     Dim streamInfo As ffStreamInfo
@@ -330,7 +330,7 @@ Public Sub Edit(ByVal inputFilepath As String, ByVal outputFilepath As String, B
         
         streamInfo = GetInfo(inputFilepath)
         
-        If eparms Is Nothing Then encodeStr = "" Else encodeStr = eparms.GetEncodeString
+        If oEncSet Is Nothing Then encodeStr = "" Else encodeStr = oEncSet.GetEncodeString
 
         cmd = " -i " & instream & " -filter_complex """
         cmd2 = ""
@@ -408,7 +408,7 @@ Public Sub Edit(ByVal inputFilepath As String, ByVal outputFilepath As String, B
     End If
 End Sub
 
-Public Sub Transpose(ByVal inputFilepath As String, ByVal outputFilepath As String, ByVal tcode As ffTransposeCode, Optional eparms As ffEncodeSet)
+Public Sub Transpose(ByVal inputFilepath As String, ByVal outputFilepath As String, ByVal tcode As ffTransposeCode, Optional oEncSet As ffEncodeSet)
     '0 - rotate by 90 deg counter-clockwise and flip vertically (default)
     '1 - rotate by 90 deg clockwise
     '2 - rotate by 90 deg counter-clockwise
@@ -422,7 +422,7 @@ Public Sub Transpose(ByVal inputFilepath As String, ByVal outputFilepath As Stri
     
     streamInfo = GetInfo(inputFilepath)
     
-    If eparms Is Nothing Then encodeStr = "" Else encodeStr = eparms.GetEncodeString
+    If oEncSet Is Nothing Then encodeStr = "" Else encodeStr = oEncSet.GetEncodeString
         
     cmd = " -i " & instream & " -filter_complex """
     
@@ -446,12 +446,12 @@ Public Sub Transpose(ByVal inputFilepath As String, ByVal outputFilepath As Stri
     SendCommand cmd
 End Sub
 
-Public Sub AutoLevel(ByVal inputFilepath As String, ByVal outputFilepath As String, Optional eparms As ffEncodeSet)
+Public Sub AutoLevel(ByVal inputFilepath As String, ByVal outputFilepath As String, Optional oEncSet As ffEncodeSet)
     'stretches luminence to full range
     instream = Chr(34) & GetAbsolutePath(inputFilepath, mDefaultIOPath) & Chr(34)
     outstream = Chr(34) & GetAbsolutePath(outputFilepath, mDefaultIOPath) & Chr(34)
         
-    If eparms Is Nothing Then encodeStr = "" Else encodeStr = eparms.GetEncodeString
+    If oEncSet Is Nothing Then encodeStr = "" Else encodeStr = oEncSet.GetEncodeString
         
     cmd = " -i " & instream & " -vf ""pp='al'""" & encodeStr & " -y " & outstream
 
@@ -488,7 +488,7 @@ Public Sub ExtractFrame(ByVal inputFilepath As String, ByVal outputFilepath As S
     SendCommand cmd
 End Sub
 
-Public Sub Reverse(ByVal inputFilepath As String, ByVal outputFilepath As String, Optional eparms As ffEncodeSet)
+Public Sub Reverse(ByVal inputFilepath As String, ByVal outputFilepath As String, Optional oEncSet As ffEncodeSet)
     Dim streamInfo As ffStreamInfo
     
     instream = Chr(34) & GetAbsolutePath(inputFilepath, mDefaultIOPath) & Chr(34)
@@ -496,7 +496,7 @@ Public Sub Reverse(ByVal inputFilepath As String, ByVal outputFilepath As String
     
     streamInfo = GetInfo(inputFilepath)
     
-    If eparms Is Nothing Then encodeStr = "" Else encodeStr = eparms.GetEncodeString
+    If oEncSet Is Nothing Then encodeStr = "" Else encodeStr = oEncSet.GetEncodeString
     
     cmd = " -i " & instream
     If streamInfo.HasVideo Then cmd = cmd & " -vf reverse"
@@ -506,7 +506,7 @@ Public Sub Reverse(ByVal inputFilepath As String, ByVal outputFilepath As String
     SendCommand cmd
 End Sub
 
-Public Sub ChangeSpeed(ByVal inputFilepath As String, ByVal outputFilepath As String, ByVal speedFactor As Single, Optional eparms As ffEncodeSet)
+Public Sub ChangeSpeed(ByVal inputFilepath As String, ByVal outputFilepath As String, ByVal speedFactor As Single, Optional oEncSet As ffEncodeSet)
     Dim streamInfo As ffStreamInfo
     instream = Chr(34) & GetAbsolutePath(inputFilepath, mDefaultIOPath) & Chr(34)
     outstream = Chr(34) & GetAbsolutePath(outputFilepath, mDefaultIOPath) & Chr(34)
@@ -517,7 +517,7 @@ Public Sub ChangeSpeed(ByVal inputFilepath As String, ByVal outputFilepath As St
     
     If streamInfo.HasAudio Then atempo = Application.min(Application.Max(speedFactor, 0.5), 100) 'atempo needs to be between .5 to 100
     
-    If eparms Is Nothing Then encodeStr = "" Else encodeStr = eparms.GetEncodeString
+    If oEncSet Is Nothing Then encodeStr = "" Else encodeStr = oEncSet.GetEncodeString
     
     cmd = " -i " & instream & " -filter_complex """
     
@@ -604,14 +604,14 @@ Sub Silence(ByVal videoInputFilePath As String, ByVal outputFilepath As String)
     SendCommand cmd
 End Sub
 
-Public Sub Fade(ByVal inputFilepath As String, ByVal outputFilepath As String, Optional ByVal FadeInDuration As Single = 3, Optional ByVal FadeOutDuration As Single = 3, Optional ByVal fadeAudio As Boolean = True, Optional eparms As ffEncodeSet)
+Public Sub Fade(ByVal inputFilepath As String, ByVal outputFilepath As String, Optional ByVal FadeInDuration As Single = 3, Optional ByVal FadeOutDuration As Single = 3, Optional ByVal fadeAudio As Boolean = True, Optional oEncSet As ffEncodeSet)
     Dim streamInfo As ffStreamInfo
     Dim ffMpeg As New ffMpeg
     
     instream = Chr(34) & GetAbsolutePath(inputFilepath, mDefaultIOPath) & Chr(34)
     outstream = Chr(34) & GetAbsolutePath(outputFilepath, mDefaultIOPath) & Chr(34)
     
-    If eparms Is Nothing Then encodeStr = "" Else encodeStr = eparms.GetEncodeString
+    If oEncSet Is Nothing Then encodeStr = "" Else encodeStr = oEncSet.GetEncodeString
     
     streamInfo = GetInfo(inputFilepath)
     
@@ -650,7 +650,7 @@ Public Sub Fade(ByVal inputFilepath As String, ByVal outputFilepath As String, O
     SendCommand cmd
 End Sub
 
-Public Sub CurvesFilter(ByVal inputFilepath As String, ByVal outputFilepath As String, curvesParms As ffCurvesFilter, Optional eparms As ffEncodeSet)
+Public Sub CurvesFilter(ByVal inputFilepath As String, ByVal outputFilepath As String, oCurves As ffCurvesFilter, Optional oEncSet As ffEncodeSet)
     Dim ffMpeg As New ffMpeg
     Dim streamInfo As ffStreamInfo
     
@@ -661,22 +661,22 @@ Public Sub CurvesFilter(ByVal inputFilepath As String, ByVal outputFilepath As S
     'output of curves filter defaults to rgb - here we get the pixel format of the input and use that for output
     PixelFormat = streamInfo.PixelFormat
     
-    If eparms Is Nothing Then encodeStr = "" Else encodeStr = eparms.GetEncodeString
+    If oEncSet Is Nothing Then encodeStr = "" Else encodeStr = oEncSet.GetEncodeString
     
-    curvesStr = GetFilterString(curvesParms) & ",format=" & PixelFormat
+    curvesStr = GetFilterString(oCurves) & ",format=" & PixelFormat
     
     cmd = "-i " & instream & " -vf " & """" & curvesStr & """" & encodeStr & " -c:a copy -y " & outstream
     
     SendCommand cmd
 End Sub
 
-Public Sub Resize(ByVal inputFilepath As String, ByVal outputFilepath As String, Optional ByVal width As Integer = -1, Optional ByVal height As Integer = -1, Optional ByVal scaleBy As Single = 1#, Optional eparms As ffEncodeSet)
+Public Sub Resize(ByVal inputFilepath As String, ByVal outputFilepath As String, Optional ByVal width As Integer = -1, Optional ByVal height As Integer = -1, Optional ByVal scaleBy As Single = 1#, Optional oEncSet As ffEncodeSet)
     'https://trac.ffmpeg.org/wiki/Scaling
     'if width or height = -1, then keeps original size, scaled by scaleBy
     instream = Chr(34) & GetAbsolutePath(inputFilepath, mDefaultIOPath) & Chr(34)
     outstream = Chr(34) & GetAbsolutePath(outputFilepath, mDefaultIOPath) & Chr(34)
     
-    If eparms Is Nothing Then encodeStr = "" Else encodeStr = eparms.GetEncodeString
+    If oEncSet Is Nothing Then encodeStr = "" Else encodeStr = oEncSet.GetEncodeString
     
     If scaleBy <> 1 Then
         scaleStr = "scale=iw*" & scaleBy & ":ih*" & scaleBy
@@ -698,13 +698,13 @@ Public Sub Resize(ByVal inputFilepath As String, ByVal outputFilepath As String,
     SendCommand cmd
 End Sub
 
-Public Sub Crop(ByVal inputFilepath As String, ByVal outputFilepath As String, Optional ByVal x As String, Optional ByVal y As String, Optional ByVal width As String, Optional ByVal height As String, Optional eparms As ffEncodeSet)
+Public Sub Crop(ByVal inputFilepath As String, ByVal outputFilepath As String, Optional ByVal x As String, Optional ByVal y As String, Optional ByVal width As String, Optional ByVal height As String, Optional oEncSet As ffEncodeSet)
     Dim w As String, h As String
 
     instream = Chr(34) & GetAbsolutePath(inputFilepath, mDefaultIOPath) & Chr(34)
     outstream = Chr(34) & GetAbsolutePath(outputFilepath, mDefaultIOPath) & Chr(34)
     
-    If eparms Is Nothing Then encodeStr = "" Else encodeStr = eparms.GetEncodeString
+    If oEncSet Is Nothing Then encodeStr = "" Else encodeStr = oEncSet.GetEncodeString
     
     If width = "" Then width = "iw"
     If height = "" Then height = "ih"
@@ -719,25 +719,29 @@ Public Sub Crop(ByVal inputFilepath As String, ByVal outputFilepath As String, O
     SendCommand cmd
 End Sub
 
-Public Sub OverlayImage(ByVal inputFilepath As String, ByVal outputFilepath As String, images As ffOverlays, Optional eparms As ffEncodeSet)
-    If eparms Is Nothing Then encodeStr = "" Else encodeStr = eparms.GetEncodeString
+Public Sub Overlay(ByVal inputFilepath As String, ByVal outputFilepath As String, oOverlays As ffOverlays, Optional oEncSet As ffEncodeSet)
+    If oEncSet Is Nothing Then encodeStr = "" Else encodeStr = oEncSet.GetEncodeString
     
     instream = Chr(34) & GetAbsolutePath(inputFilepath, mDefaultIOPath) & Chr(34)
     outstream = Chr(34) & GetAbsolutePath(outputFilepath, mDefaultIOPath) & Chr(34)
     
     cmd = " -i " & instream
     ovrly = ""
-    For i = 1 To images.Count
-        inp = Chr(34) & GetAbsolutePath(images.Item(i).InputPath, mDefaultIOPath) & Chr(34)
-        st = images.Item(i).startTime
-        et = images.Item(i).endTime
-        fi = images.Item(i).FadeInDuration
-        fo = images.Item(i).FadeOutDuration
-        rs = images.Item(i).Resize
-        xl = images.Item(i).XLoc
-        yl = images.Item(i).YLoc
+    For i = 1 To oOverlays.Count
+        inp = Chr(34) & GetAbsolutePath(oOverlays.Item(i).InputPath, mDefaultIOPath) & Chr(34)
+        st = oOverlays.Item(i).startTime
+        et = oOverlays.Item(i).endTime
+        fi = oOverlays.Item(i).FadeInDuration
+        fo = oOverlays.Item(i).FadeOutDuration
+        rs = oOverlays.Item(i).Resize
+        xl = oOverlays.Item(i).XLoc
+        yl = oOverlays.Item(i).YLoc
 
-        sinp = sinp & " -loop 1 -t " & et - st & " -i " & inp
+        If IsImage(oOverlays.Item(i).InputPath) Then
+            sinp = sinp & " -loop 1 -t " & et - st & " -i " & inp
+        Else
+            sinp = sinp & " -i " & inp
+        End If
         
         If rs = 1 Then
             scaleStr = scaleStr & "[" & i & "]copy[rsovr" & i & "];"
@@ -756,7 +760,7 @@ Public Sub OverlayImage(ByVal inputFilepath As String, ByVal outputFilepath As S
     cmd = cmd & sinp
     cmd = cmd & " -filter_complex """
     cmd = cmd & scaleStr & filt & ovrly
-    cmd = cmd & """ -map """ & "[base" & images.Count & "]" & """"
+    cmd = cmd & """ -map """ & "[base" & oOverlays.Count & "]" & """"
     cmd = cmd & " -c:a copy -shortest" & encodeStr & " -y " & outstream
     
     'Debug.Print cmd
@@ -764,23 +768,30 @@ Public Sub OverlayImage(ByVal inputFilepath As String, ByVal outputFilepath As S
     SendCommand cmd
 End Sub
 
-Public Sub MakeSlideShow(images As ffSlideShow, ByVal outputFilepath As String, Optional eparms As ffEncodeSet)
-    If eparms Is Nothing Then encodeStr = "" Else encodeStr = eparms.GetEncodeString
+Public Sub MakeSlideShow(oSlides As ffSlideShow, ByVal outputFilepath As String, Optional oEncSet As ffEncodeSet)
+    If oEncSet Is Nothing Then encodeStr = "" Else encodeStr = oEncSet.GetEncodeString
     
     outstream = Chr(34) & GetAbsolutePath(outputFilepath, mDefaultIOPath) & Chr(34)
     
     cmd = ""
     off = 0
-    For i = 1 To images.Count
-        inp = Chr(34) & GetAbsolutePath(images(i).InputPath, mDefaultIOPath) & Chr(34)
-        d = images(i).Duration
-        fd = images(i).TransitionDuration
-        tr = GetXfadeTransString(images(i).TransitionType)
-        cmd = cmd & " -loop 1 -t " & d & " -i " & inp
+    For i = 1 To oSlides.Count
+        inp = Chr(34) & GetAbsolutePath(oSlides(i).InputPath, mDefaultIOPath) & Chr(34)
+        d = oSlides(i).Duration
+        fd = oSlides(i).TransitionDuration
+        tr = GetXfadeTransString(oSlides(i).TransitionType)
+        
+        If IsImage(oSlides.Item(i).InputPath) Then
+            cmd = cmd & " -loop 1 -t " & d & " -i " & inp
+        Else
+            'cmd = cmd & " -i " & inp
+            cmd = cmd & " -t " & d & " -i " & inp
+        End If
+        
         off = off + d - fd
         If i = 1 Then
             fltStr = "[0][1]xfade=transition=" & tr & ":duration=" & fd & ":offset=" & off & "[f1]"
-        ElseIf i < images.Count Then
+        ElseIf i < oSlides.Count Then
             fltStr = fltStr & ";[f" & i - 1 & "][" & i & "]xfade=transition=" & tr & ":duration=" & fd & ":offset=" & off & "[f" & i & "]"
         End If
     Next i
@@ -789,7 +800,7 @@ Public Sub MakeSlideShow(images As ffSlideShow, ByVal outputFilepath As String, 
     
     cmd = cmd & outstream
     
-    'Debug.Print Replace(Replace(cmd, ";", ";" & vbCr), "-filter_complex """, "-filter_complex """ & vbCr)
+    Debug.Print Replace(Replace(cmd, ";", ";" & vbCr), "-filter_complex """, "-filter_complex """ & vbCr)
     
     SendCommand cmd
 
@@ -812,22 +823,26 @@ Public Sub DeleteFiles(ParamArray filelist() As Variant)
             For j = LBound(filelist(i)) To UBound(filelist(i))
                 strlist = Split(filelist(i)(j), ",")
                 For K = 0 To UBound(strlist)
+                    On Error Resume Next
                     fso.DeleteFile GetAbsolutePath(strlist(K), mDefaultIOPath), True
+                    On Error GoTo 0
                 Next K
             Next j
         Else
             strlist = Split(filelist(i), ",")
             For K = 0 To UBound(strlist)
+                On Error Resume Next
                 fso.DeleteFile GetAbsolutePath(strlist(K), mDefaultIOPath), True
+                On Error GoTo 0
             Next K
         End If
     Next i
 End Sub
 
-Public Sub DrawText(ByVal inputFilepath As String, ByVal outputFilepath As String, oTexts As ffTexts, Optional eparms As ffEncodeSet)
+Public Sub DrawText(ByVal inputFilepath As String, ByVal outputFilepath As String, oTexts As ffTexts, Optional oEncSet As ffEncodeSet)
     Dim oTextDraw As ffText
     
-    If eparms Is Nothing Then encodeStr = "" Else encodeStr = eparms.GetEncodeString
+    If oEncSet Is Nothing Then encodeStr = "" Else encodeStr = oEncSet.GetEncodeString
          
     instream = Chr(34) & GetAbsolutePath(inputFilepath, mDefaultIOPath) & Chr(34)
     outstream = Chr(34) & GetAbsolutePath(outputFilepath, mDefaultIOPath) & Chr(34)
@@ -915,13 +930,67 @@ End Function
 Private Function GetAbsolutePath(ByVal strPath As String, Optional ByVal refPath As String = "") As String
     Dim fso As New FileSystemObject
     saveppath = CurDir()
-    If refPath = "" Then refPath = ThisWorkbook.path
+    If refPath = "" Then refPath = ThisWorkbook_PathOnDisk
     ChDrive refPath
     ChDir refPath
     GetAbsolutePath = fso.GetAbsolutePathName(VBA.Trim(strPath))
     ChDrive saveppath
     ChDir saveppath
 End Function
+
+Public Function ThisWorkbook_PathOnDisk() As String
+    ' The reason for this function is that when the workbook is opened on a disk synched with OneDrive or SharePoint,
+    '  (ThisWorkbook.FullName and) ThisWorkbook.Path returns the correspondent cloud URLs instead than the original path on disk. For example:
+    ' "https://d.docs.live.net/e06a[etc...]/MyDocumentFolder/MyFolder"
+    ' or "https://mycompany.sharepoint.com/personal/MyName_Company_com/MyDocumentFolder/mycompany/Apps/BlaBla"
+    ' causing problems if that path is used with other functions, like ChDrive.
+    '
+    ' This function must be used as a replacement to "ThisWorkbook.Path" that always returns the original/real path on disk. For example:
+    ' "C:\Users\myUserName\OneDrive\Documenti\MyFolder"
+
+    Dim strPath As String
+    strPath = ThisWorkbook.path
+
+    If VBA.Left$(strPath, 8) = "https://" Then
+        'Original script taken from https://stackoverflow.com/a/72736800/11738627  (credits to GWD and his sources)
+        Const HKEY_CURRENT_USER = &H80000001
+        Dim objReg As WbemScripting.SWbemObjectEx 'changed to early binding by GCUser99
+        Dim regPath As String
+        Dim subKeys() As Variant
+        Dim subKey As Variant
+        Dim strValue As String
+        Dim strMountpoint As String
+        Dim strSecPart As String
+        
+        Static pathSep As String
+        If pathSep = "" Then pathSep = Application.PathSeparator
+    
+        Set objReg = GetObject("winmgmts:{impersonationLevel=impersonate}!\\.\root\default:StdRegProv")
+
+        regPath = "Software\SyncEngines\Providers\OneDrive\"
+        objReg.EnumKey HKEY_CURRENT_USER, regPath, subKeys
+    
+        For Each subKey In subKeys
+            objReg.getStringValue HKEY_CURRENT_USER, regPath & subKey, "UrlNamespace", strValue
+            If InStr(strPath, strValue) > 0 Then
+                objReg.getStringValue HKEY_CURRENT_USER, regPath & subKey, "MountPoint", strMountpoint
+                strSecPart = Replace(Mid(strPath, Len(strValue)), "/", pathSep)
+                ThisWorkbook_PathOnDisk = strMountpoint & strSecPart
+    
+                Do Until Dir(ThisWorkbook_PathOnDisk, vbDirectory) <> "" Or InStr(2, strSecPart, pathSep) = 0
+                    strSecPart = Mid(strSecPart, InStr(2, strSecPart, pathSep))
+                    ThisWorkbook_PathOnDisk = strMountpoint & strSecPart
+                Loop
+                Exit Function
+            End If
+        Next subKey
+    End If
+        
+    ThisWorkbook_PathOnDisk = strPath
+    
+End Function
+
+
 
 Private Function TimeStringToSecs(ByVal ts As String) As Double
     tsparts = Split(ts, ":")
@@ -1156,9 +1225,30 @@ Private Function EscapeSpecialChars(ByVal txt As String) As String
     EscapeSpecialChars = Replace(txt, "}", "\\}")
 End Function
 
-Function is2d(a As Variant) As Boolean
+Private Function is2d(a As Variant) As Boolean
     Dim l As Long
     On Error Resume Next
     l = LBound(a, 2)
     is2d = Err = 0
+End Function
+
+Private Function IsImage(ByVal filepath As String) As Boolean
+    Dim fso As New FileSystemObject
+    ext = fso.GetExtensionName(filepath)
+    extList = ".jpg.jpeg.jpe.jif.jfif.jfi"
+    extList = extList & ".png"
+    extList = extList & ".tiff.tif"
+    extList = extList & ".webp"
+    extList = extList & ".raw.arw.cr2.nrw.k25"
+    extList = extList & ".bmp.dib"
+    extList = extList & ".heif.heic"
+    extList = extList & ".ind.indd.indt"
+    extList = extList & ".jp2.j2k.jpf.jpx.jpm.mj2"
+    extList = extList & ".gif"
+    extList = extList & "."
+    If InStr(1, extList, "." & ext & ".", vbTextCompare) Then
+        IsImage = True
+    Else
+        IsImage = False
+    End If
 End Function

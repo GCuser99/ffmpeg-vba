@@ -1,6 +1,6 @@
 Attribute VB_Name = "examples"
 ' ==========================================================================
-' ffmpeg-vba v0.3
+' ffmpeg-vba v0.4
 '
 ' An ffmpeg wrapper written in MS Excel VBA (MS Windows)
 '
@@ -14,9 +14,9 @@ Attribute VB_Name = "examples"
 '
 ' For these test subs to function unmodified, download ffmpeg from:
 '
-'   https://github.com/BtbN/FFmpeg-Builds/releases
-'   or...
-'   https://www.gyan.dev/ffmpeg/builds/
+'    https://github.com/BtbN/FFmpeg-Builds/releases
+'    or...
+'    https://www.gyan.dev/ffmpeg/builds/
 '
 ' Locate the ffmpeg, ffplay, and ffprobe executables in the same directory as this Excel file.
 '
@@ -25,14 +25,14 @@ Attribute VB_Name = "examples"
 '
 ' Only one input file is needed for these tests:
 '
-'   http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+'    http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
 '
 ' Download the above into same directory as this excel file.
 '
 ' ffmpeg-vba supports relative file paths. The default i/o path directory is same as where this Excel file resides.
 '
 ' However, that can be changed by using the following command once before file specification:
-'   media.DefaultIOPath=[path to your media files]
+'    media.DefaultIOPath=[path to your media files]
 '
 ' To specify a file located in the default i/o directory, use either ".\my_file.mp4" or "my_file.mp4"
 '
@@ -48,9 +48,9 @@ Attribute VB_Name = "examples"
 '
 ' Some method inputs take an array of time pairs - these can take the following forms:
 '
-'   - a comma-separated string of time pairs, for example: "0.0 to 5.0, 00:10.0 to 00:15.0, 00:00:20.0 to 00:00:25.0"
-'   - a 1D array of time pair strings, for example: Array("0.0 to 5.0", "00:10.0 to 00:15.0", "00:00:20.0 to 00:00:25.0")
-'   - or a 2D array of times, for example: Array(Array(0.0,5.0), Array("00:10.0","00:15.0"), Array("00:00:20.0","00:00:25.0"))
+'    - a comma-separated string of time pairs, for example: "0.0 to 5.0, 00:10.0 to 00:15.0, 00:00:20.0 to 00:00:25.0"
+'    - a 1D array of time pair strings, for example: Array("0.0 to 5.0", "00:10.0 to 00:15.0", "00:00:20.0 to 00:00:25.0")
+'    - or a 2D array of times, for example: Array(Array(0.0,5.0), Array("00:10.0","00:15.0"), Array("00:00:20.0","00:00:25.0"))
 '
 ' ==========================================================================
 
@@ -94,6 +94,8 @@ Sub test_slide_show()
     'uncomment and modify command below if media files are in a different loc than this Excel file
     'media.DefaultIOPath="[path to your media files]"
     
+    'slides can be videos or images but must have similar encoding
+    
     'extract images every 13.5 secs for slide show
     For i = 1 To 44
         media.ExtractFrame "BigBuckBunny.mp4", "slide" & Format(i, "00") & ".jpg", 13.5 * (i - 1) + 1
@@ -130,32 +132,40 @@ Sub test_overlays()
     'uncomment and modify command below if media files are in a different loc than this Excel file
     'media.DefaultIOPath="[path to your media files]"
     
-    media.ExtractFrame "BigBuckBunny.mp4", "overlay01.jpg", 27
-    media.ExtractFrame "BigBuckBunny.mp4", "overlay02.jpg", 37
-    media.ExtractFrame "BigBuckBunny.mp4", "overlay03.jpg", 47
+    'overlays can be videos or images or a mix thereof
     
+    'extract overlay images/videos from video
+    media.Trim "BigBuckBunny.mp4", "overlay01.mp4", 37, 47, True
+    media.Trim "BigBuckBunny.mp4", "overlay02.mp4", 67, 77, True
+    media.Trim "BigBuckBunny.mp4", "overlay03.mp4", 87, 97, True
+    
+    'initialize overlays with ffOverlay class
     ovls.MakeOverlays 3
     
-    ovls.XLoc = "right-10": ovls.YLoc = "10"
+    'set some global overlay properties
+    ovls.XLoc = "right-10": ovls.YLoc = 10
     ovls.FadeInDuration = 3: ovls.FadeOutDuration = 3
     
-    ovls(1).InputPath = "overlay01.jpg"
+    'set individual overlay properties
+    ovls(1).InputPath = "overlay01.mp4"
     ovls(1).startTime = 0: ovls(1).endTime = 10
     ovls(1).Resize = 0.3
     
-    ovls(2).InputPath = "overlay02.jpg"
+    ovls(2).InputPath = "overlay02.mp4"
     ovls(2).startTime = 7: ovls(2).endTime = 17
     ovls(2).Resize = 0.3
     
-    ovls(3).InputPath = "overlay03.jpg"
+    ovls(3).InputPath = "overlay03.mp4"
     ovls(3).startTime = 14: ovls(3).endTime = 24
     ovls(3).Resize = 0.3
     
-    media.Trim "BigBuckBunny.mp4", "BigBuckBunny_trim.mp4", 27, 52
+    'trim the input video
+    media.Trim "BigBuckBunny.mp4", "trim.mp4", 27, 52, True
     
-    media.OverlayImage "BigBuckBunny_trim.mp4", "overlays.mp4", ovls
-
-    media.DeleteFiles "BigBuckBunny_trim.mp4", "overlay*.jpg"
+    'overlay onto the "base" video
+    media.Overlay "trim.mp4", "overlays.mp4", ovls
+        
+    media.DeleteFiles "trim.mp4", "overlay0*.mp4"
     
     media.Play "overlays.mp4", , , , 0.5
 End Sub
@@ -180,7 +190,7 @@ Sub test_run_command()
     Dim player As New ffPlay
     Dim prober As New ffProbe
     
-    'uncomment and modify command below if media files are in a different loc than this Excel file
+    'uncomment and modify commands below if media files are in a different loc than this Excel file
     'media.DefaultIOPath="[path to your media files]"
     'player.DefaultIOPath="[path to your media files]"
     'probe.DefaultIOPath="[path to your media files]"
@@ -394,10 +404,10 @@ End Sub
 
 Sub test_fade()
     Dim media As New ffMpeg
-    Dim eparms As New ffEncodeSet
+    Dim oEncSet As New ffEncodeSet
     
     'uncomment and modify commands below if media files are in a different loc than this Excel file
-    'media.DefaultIOPath="[path to your media files]"
+    'media.DefaultIOPath = "[path to your media files]"
     
     'trim the input video to the desired time window
     media.Trim "BigBuckBunny.mp4", "trim.mp4", "1:16", "1:36", True
@@ -430,10 +440,10 @@ Sub test_fade()
     media.DrawText "join.mp4", "texts.mp4", txts
     
     'specify a constant rate factor for encoding the final result using EncodeSet class
-    eparms.Crf = 25
+    oEncSet.Crf = 25
     
     'Make 3 second fade from/to black at beginning/end of video
-    media.Fade "texts.mp4", "fade.mp4", 3, 3, , eparms
+    media.Fade "texts.mp4", "fade.mp4", 3, 3, , oEncSet
     
     'print resulting file size to Intermediate Window
     Debug.Print media.Probe.GetFileSize("fade.mp4") 'in mb

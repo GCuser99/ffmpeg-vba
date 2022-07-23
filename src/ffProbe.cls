@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' ==========================================================================
-' ffmpeg-vba v0.3
+' ffmpeg-vba v0.4
 '
 ' An ffmpeg wrapper written in MS Excel VBA (MS Windows)
 '
@@ -213,7 +213,7 @@ Public Function GetStreamInfo(ByVal inputFilepath As String, Optional ByVal stre
         cmd = "-v error -hide_banner -print_format " & fmtStr & " -select_streams a:0 -show_streams"
     End Select
     
-    Debug.Print cmd
+    'Debug.Print cmd
     
     resp = Me.RunCommand(cmd, inputFilepath)
     
