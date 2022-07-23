@@ -14,7 +14,7 @@ So what does this functionality have to do with MS Excel? Not much. However, if 
 
 ## Setup
 
-1) Download/unzip ffmpeg-vba_v0.3.zip to a directory of your choice
+1) Download/unzip ffmpeg-vba_v0.4.zip to a directory of your choice
 2) Download/unzip the [ffpmeg executables](https://ffmpeg.org/download.html) (ffmpeg.exe, ffprobe.exe, ffplay.exe) and place in same directory as the Excel macro file
 3) Download the sample video file called "BigBuckBunny.mp4" from [here](http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4) into same directory
 4) Open the excel macro file, go to VBA IDE under the Developer Tab
