@@ -2,5 +2,5 @@
 * text=auto
 *.bas text eol=crlf linguist-language=VBA
 *.cls text eol=crlf linguist-language=VBA
-*.frm linguist-language=VBA
+*.frm text eol=crlf linguist-language=VBA
 *.twin linguist-language=twinBASIC
